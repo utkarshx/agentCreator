@@ -4,34 +4,6 @@
     "last_link_id": 2,
     "nodes": [
       {
-        "id": 1,
-        "type": "basic/const",
-        "pos": {
-          "0": 100,
-          "1": 100
-        },
-        "size": {
-          "0": 210,
-          "1": 58
-        },
-        "flags": {},
-        "order": 0,
-        "mode": 0,
-        "inputs": [],
-        "outputs": [
-          {
-            "name": "",
-            "type": "number",
-            "links": [
-              1
-            ]
-          }
-        ],
-        "properties": {
-          "value": 1
-        }
-      },
-      {
         "id": 2,
         "type": "basic/const",
         "pos": {
@@ -94,6 +66,34 @@
         ],
         "properties": {
           "precision": 1
+        }
+      },
+      {
+        "id": 1,
+        "type": "basic/const",
+        "pos": {
+          "0": 100,
+          "1": 100
+        },
+        "size": {
+          "0": 210,
+          "1": 58
+        },
+        "flags": {},
+        "order": 0,
+        "mode": 0,
+        "inputs": [],
+        "outputs": [
+          {
+            "name": "",
+            "type": "number",
+            "links": [
+              1
+            ]
+          }
+        ],
+        "properties": {
+          "value": 6
         }
       }
     ],
