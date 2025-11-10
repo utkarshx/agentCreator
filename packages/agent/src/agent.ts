@@ -1,6 +1,7 @@
 import { spawn } from 'child_process';
 import { LGraph, LiteGraph } from '@comfyorg/litegraph';
 import { registerBackendNodes } from './nodes/index.js';
+import { readFileSync } from 'fs';
 
 class AgentExecutor {
   private graph: any = null;
@@ -18,10 +19,35 @@ class AgentExecutor {
   }
 
   // Configure and execute a graph
-  async executeGraph(graphData, message = null) {
+  async executeGraph(dataFilePath = null) {
     try {
       // console.log('Agent: Starting graph execution');
       this.isRunning = true;
+
+      // Read graph data from file if dataFilePath is provided, otherwise expect it as parameter
+      let graphData, message;
+      if (dataFilePath) {
+        try {
+          const fileContent = readFileSync(dataFilePath, 'utf8');
+          const data = JSON.parse(fileContent);
+          graphData = data.graphData;
+          message = data.message;
+        } catch (error) {
+          console.error('Failed to read data file:', dataFilePath, error);
+          return {
+            success: false,
+            error: 'Failed to read data file: ' + error.message,
+            message: 'Graph execution failed'
+          };
+        }
+      } else {
+        // For backward compatibility, this can be called directly with parameters
+        return {
+          success: false,
+          error: 'This method requires a dataFilePath parameter',
+          message: 'Graph execution failed'
+        };
+      }
 
       // Store message in execution context for AI agent nodes
       if (message) {
@@ -122,7 +148,7 @@ if (import.meta.url === `file://${process.argv[1]}` || process.env.NODE_AGENT_CL
 
       switch (command.type) {
         case 'execute':
-          const result = await agent.executeGraph(command.graphData, command.message);
+          const result = await agent.executeGraph(command.dataFile);
           process.stdout.write(JSON.stringify(result) + '\n');
           break;
 

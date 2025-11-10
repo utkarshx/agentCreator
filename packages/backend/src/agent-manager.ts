@@ -1,6 +1,7 @@
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { writeFileSync, mkdirSync } from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -123,10 +124,28 @@ class AgentManager {
 
   async executeGraph(graphData: any, message?: string): Promise<any> {
     try {
-      const result = await this.sendCommand({
-        type: 'execute',
+      // Create data directory if it doesn't exist
+      const dataDir = join(__dirname, '../../data');
+      try {
+        mkdirSync(dataDir, { recursive: true });
+      } catch (error) {
+        // Directory might already exist
+      }
+
+      // Write graph data and message to data.json file
+      const dataFilePath = join(dataDir, 'data.json');
+      const dataToWrite = {
         graphData,
         message
+      };
+
+      writeFileSync(dataFilePath, JSON.stringify(dataToWrite, null, 2));
+      console.log('Graph data written to:', dataFilePath);
+
+      // Send execute command to agent (agent will read from data.json)
+      const result = await this.sendCommand({
+        type: 'execute',
+        dataFile: dataFilePath
       });
       return result;
     } catch (error) {
