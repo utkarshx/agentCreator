@@ -8,132 +8,25 @@ const __dirname = dirname(__filename);
 
 class AgentManager {
   private agentProcess: any = null;
-  private isReady: boolean = false;
-  private pendingCommands: Array<{resolve: Function, reject: Function}> = [];
-  private responseBuffer: string = '';
+  private dataDir: string;
 
   constructor() {
-    this.initializeAgent();
+    this.dataDir = join(__dirname, '../../data');
+    this.ensureDataDirectory();
   }
 
-  private initializeAgent() {
-    const agentPath = join(__dirname, '../../agent/dist/index.js');
-    console.log('Starting agent process from:', agentPath);
-
+  private ensureDataDirectory(): void {
     try {
-      this.agentProcess = spawn('node', [agentPath], {
-        stdio: ['pipe', 'pipe', 'inherit'],
-        env: { ...process.env, NODE_AGENT_CLI: 'true' },
-        cwd: process.cwd()
-      });
-
-      if (!this.agentProcess) {
-        console.error('Failed to spawn agent process');
-        return;
-      }
-
-      console.log('Agent process spawned with PID:', this.agentProcess.pid);
+      mkdirSync(this.dataDir, { recursive: true });
     } catch (error) {
-      console.error('Error spawning agent process:', error);
-      this.agentProcess = null;
-      return;
+      // Directory might already exist
     }
-
-    if (this.agentProcess.stdout) {
-      this.agentProcess.stdout.on('data', (data: Buffer) => {
-        const responses = data.toString().split('\n').filter((line: string) => line.trim());
-
-        for (const response of responses) {
-          try {
-            const parsed = JSON.parse(response);
-
-            if (parsed.ready) {
-              this.isReady = true;
-              console.log('Agent process is ready');
-              continue;
-            }
-
-            if (this.pendingCommands.length > 0) {
-              const { resolve, reject } = this.pendingCommands.shift()!;
-              resolve(parsed);
-            }
-          } catch (error) {
-            console.error('Failed to parse agent response:', response, error);
-          }
-        }
-      });
-    }
-
-    if (this.agentProcess.stderr) {
-      this.agentProcess.stderr.on('data', (data: Buffer) => {
-        console.error('Agent stderr:', data.toString());
-      });
-    }
-
-    this.agentProcess.on('close', (code: number) => {
-      console.log(`Agent process exited with code ${code}`);
-      this.isReady = false;
-
-      // Reject all pending commands
-      while (this.pendingCommands.length > 0) {
-        const { reject } = this.pendingCommands.shift()!;
-        reject(new Error('Agent process terminated'));
-      }
-    });
-
-    this.agentProcess.on('error', (error: Error) => {
-      console.error('Agent process error:', error);
-      this.isReady = false;
-      this.agentProcess = null;
-    });
   }
 
-  private async sendCommand(command: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-      if (!this.agentProcess) {
-        reject(new Error('Agent process not available'));
-        return;
-      }
-
-      if (!this.isReady) {
-        // Wait a bit for agent to be ready
-        setTimeout(() => {
-          if (!this.isReady) {
-            reject(new Error('Agent process not ready'));
-          }
-        }, 1000);
-        return;
-      }
-
-      const timeout = setTimeout(() => {
-        const index = this.pendingCommands.findIndex(p => p.resolve === resolve);
-        if (index !== -1) {
-          this.pendingCommands.splice(index, 1);
-        }
-        reject(new Error('Agent command timeout'));
-      }, 30000); // 30 second timeout
-
-      this.pendingCommands.push({ resolve: (result: any) => {
-        clearTimeout(timeout);
-        resolve(result);
-      }, reject });
-
-      this.agentProcess.stdin.write(JSON.stringify(command) + '\n');
-    });
-  }
-
-  async executeGraph(graphData: any, message?: string): Promise<any> {
+  private async executeAgentWithGraphData(graphData: any, message?: string): Promise<any> {
     try {
-      // Create data directory if it doesn't exist
-      const dataDir = join(__dirname, '../../data');
-      try {
-        mkdirSync(dataDir, { recursive: true });
-      } catch (error) {
-        // Directory might already exist
-      }
-
-      // Write graph data and message to data.json file
-      const dataFilePath = join(dataDir, 'data.json');
+      // Write graph data and message to data.json file before starting agent
+      const dataFilePath = join(this.dataDir, 'data.json');
       const dataToWrite = {
         graphData,
         message
@@ -142,11 +35,99 @@ class AgentManager {
       writeFileSync(dataFilePath, JSON.stringify(dataToWrite, null, 2));
       console.log('Graph data written to:', dataFilePath);
 
-      // Send execute command to agent (agent will read from data.json)
-      const result = await this.sendCommand({
-        type: 'execute',
-        dataFile: dataFilePath
+      // Start the agent process
+      const agentPath = join(__dirname, '../../agent/dist/index.js');
+      console.log('Starting agent process from:', agentPath);
+
+      return new Promise((resolve, reject) => {
+        const agentProcess = spawn('node', [agentPath], {
+          stdio: ['pipe', 'pipe', 'inherit'],
+          env: { ...process.env, NODE_AGENT_CLI: 'true' },
+          cwd: process.cwd()
+        });
+
+        if (!agentProcess) {
+          reject(new Error('Failed to spawn agent process'));
+          return;
+        }
+
+        console.log('Agent process spawned with PID:', agentProcess.pid);
+
+        let agentReady = false;
+        let responseBuffer = '';
+
+        // Handle stdout from agent
+        if (agentProcess.stdout) {
+          agentProcess.stdout.on('data', (data: Buffer) => {
+            const responses = data.toString().split('\n').filter((line: string) => line.trim());
+
+            for (const response of responses) {
+              try {
+                const parsed = JSON.parse(response);
+
+                if (parsed.ready) {
+                  agentReady = true;
+                  console.log('Agent process is ready');
+
+                  // Send execute command - agent will read from data.json
+                  agentProcess.stdin.write(JSON.stringify({ type: 'execute' }) + '\n');
+                  continue;
+                }
+
+                // This is the execution result
+                resolve(parsed);
+                agentProcess.kill();
+              } catch (error) {
+                // Ignore non-JSON responses during initialization
+                if (!response.includes('Agent initialized')) {
+                  console.error('Failed to parse agent response:', response);
+                }
+              }
+            }
+          });
+        }
+
+        // Handle stderr from agent
+        if (agentProcess.stderr) {
+          agentProcess.stderr.on('data', (data: Buffer) => {
+            console.error('Agent stderr:', data.toString());
+          });
+        }
+
+        // Handle agent process completion
+        agentProcess.on('close', (code: number) => {
+          console.log(`Agent process exited with code ${code}`);
+
+          if (!agentReady && code !== 0) {
+            reject(new Error('Agent process failed to start or exited with error'));
+          }
+        });
+
+        // Handle agent process errors
+        agentProcess.on('error', (error: Error) => {
+          console.error('Agent process error:', error);
+          reject(error);
+        });
+
+        // Set a timeout for the entire operation
+        const timeout = setTimeout(() => {
+          agentProcess.kill();
+          reject(new Error('Agent execution timeout'));
+        }, 60000); // 60 second timeout
+
+        // Clear timeout when promise resolves
+        Promise.resolve().then(() => clearTimeout(timeout));
       });
+
+    } catch (error) {
+      console.error('Failed to execute graph:', error);
+      throw error;
+    }
+  }
+
+  async executeGraph(graphData: any, message?: string): Promise<any> {
+    try {
+      const result = await this.executeAgentWithGraphData(graphData, message);
       return result;
     } catch (error) {
       console.error('Failed to execute graph:', error);
@@ -155,42 +136,27 @@ class AgentManager {
   }
 
   async getStatus(): Promise<any> {
-    try {
-      return await this.sendCommand({ type: 'status' });
-    } catch (error) {
-      console.error('Failed to get agent status:', error);
-      return { isRunning: false, hasGraph: false };
-    }
+    // Since we're not keeping a persistent agent, just return basic status
+    return {
+      isRunning: false,
+      hasGraph: false,
+      mode: 'on-demand'
+    };
   }
 
   async stop(): Promise<void> {
-    try {
-      await this.sendCommand({ type: 'stop' });
-    } catch (error) {
-      console.error('Failed to stop agent:', error);
-    }
+    // No persistent agent to stop
+    console.log('No persistent agent to stop');
   }
 
   async shutdown(): Promise<void> {
-    try {
-      await this.sendCommand({ type: 'exit' });
-    } catch (error) {
-      console.error('Failed to shutdown agent gracefully:', error);
-    }
-
-    if (this.agentProcess) {
-      this.agentProcess.kill();
-      this.agentProcess = null;
-    }
+    // No persistent agent to shutdown
+    console.log('No persistent agent to shutdown');
   }
 
   restart(): void {
-    if (this.agentProcess) {
-      this.agentProcess.kill();
-    }
-    this.isReady = false;
-    this.pendingCommands = [];
-    this.initializeAgent();
+    // No persistent agent to restart
+    console.log('No persistent agent to restart');
   }
 }
 

@@ -19,32 +19,23 @@ class AgentExecutor {
   }
 
   // Configure and execute a graph
-  async executeGraph(dataFilePath = null) {
+  async executeGraph() {
     try {
       // console.log('Agent: Starting graph execution');
       this.isRunning = true;
 
-      // Read graph data from file if dataFilePath is provided, otherwise expect it as parameter
+      // Always read from data.json file
       let graphData, message;
-      if (dataFilePath) {
-        try {
-          const fileContent = readFileSync(dataFilePath, 'utf8');
-          const data = JSON.parse(fileContent);
-          graphData = data.graphData;
-          message = data.message;
-        } catch (error) {
-          console.error('Failed to read data file:', dataFilePath, error);
-          return {
-            success: false,
-            error: 'Failed to read data file: ' + error.message,
-            message: 'Graph execution failed'
-          };
-        }
-      } else {
-        // For backward compatibility, this can be called directly with parameters
+      try {
+        const fileContent = readFileSync('data.json', 'utf8');
+        const data = JSON.parse(fileContent);
+        graphData = data.graphData;
+        message = data.message;
+      } catch (error) {
+        console.error('Failed to read data.json file:', error);
         return {
           success: false,
-          error: 'This method requires a dataFilePath parameter',
+          error: 'Failed to read data.json file: ' + error.message,
           message: 'Graph execution failed'
         };
       }
@@ -148,8 +139,11 @@ if (import.meta.url === `file://${process.argv[1]}` || process.env.NODE_AGENT_CL
 
       switch (command.type) {
         case 'execute':
-          const result = await agent.executeGraph(command.dataFile);
+          const result = await agent.executeGraph();
           process.stdout.write(JSON.stringify(result) + '\n');
+
+          // Exit after execution is complete
+          process.exit(0);
           break;
 
         case 'status':

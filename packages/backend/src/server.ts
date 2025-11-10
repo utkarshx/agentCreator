@@ -15,8 +15,7 @@ app.use(bodyParser.json());
 // This is currently unused but kept for future implementation
 const _GRAPHS = new Map();
 
-// Initialize agent manager
-const agentManager = new AgentManager();
+// Agent manager will be initialized per request
 
 // API endpoint to execute a graph
 app.post('/api/execute', async (req, res) => {
@@ -27,7 +26,10 @@ app.post('/api/execute', async (req, res) => {
       return res.status(400).json({ error: 'Graph data is required' });
     }
 
-    console.log('Backend: Delegating graph execution to agent process');
+    console.log('Backend: Starting new agent process for graph execution');
+
+    // Create a new agent manager for this request
+    const agentManager = new AgentManager();
 
     // Delegate execution to the agent process
     const result = await agentManager.executeGraph(graphData, message);
@@ -50,6 +52,8 @@ app.post('/api/execute', async (req, res) => {
 // API endpoint to get agent status
 app.get('/api/agent/status', async (req, res) => {
   try {
+    // Create a temporary agent manager to get status
+    const agentManager = new AgentManager();
     const status = await agentManager.getStatus();
     res.json({
       success: true,
@@ -67,10 +71,10 @@ app.get('/api/agent/status', async (req, res) => {
 // API endpoint to restart agent
 app.post('/api/agent/restart', async (req, res) => {
   try {
-    agentManager.restart();
+    // In on-demand mode, there's no persistent agent to restart
     res.json({
       success: true,
-      message: 'Agent restarted successfully'
+      message: 'Agent runs in on-demand mode - no persistent agent to restart'
     });
   } catch (error) {
     console.error('Error restarting agent:', error);
@@ -84,18 +88,16 @@ app.post('/api/agent/restart', async (req, res) => {
 // Start the server
 app.listen(PORT, () => {
   console.log(`Backend server running on http://localhost:${PORT}`);
-  console.log('Agent execution is handled in a separate process');
+  console.log('Agent runs in on-demand mode - starts and shuts down for each request');
 });
 
 // Graceful shutdown
 process.on('SIGINT', async () => {
   console.log('Shutting down backend server...');
-  await agentManager.shutdown();
   process.exit(0);
 });
 
 process.on('SIGTERM', async () => {
   console.log('Shutting down backend server...');
-  await agentManager.shutdown();
   process.exit(0);
 });
