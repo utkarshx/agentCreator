@@ -8,25 +8,16 @@ const __dirname = dirname(__filename);
 
 class AgentManager {
   private agentProcess: any = null;
-  private dataDir: string;
 
   constructor() {
-    this.dataDir = join(__dirname, '../../data');
-    this.ensureDataDirectory();
-  }
-
-  private ensureDataDirectory(): void {
-    try {
-      mkdirSync(this.dataDir, { recursive: true });
-    } catch (error) {
-      // Directory might already exist
-    }
+    // No need to create data directory - we write to project root
   }
 
   private async executeAgentWithGraphData(graphData: any, message?: string): Promise<any> {
     try {
-      // Write graph data and message to data.json file before starting agent
-      const dataFilePath = join(this.dataDir, 'data.json');
+      // Write graph data and message to data.json file in the project root
+      // Agent runs from project root and looks for data.json there
+      const dataFilePath = join(process.cwd(), 'data.json');
       const dataToWrite = {
         graphData,
         message
