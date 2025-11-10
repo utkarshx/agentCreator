@@ -1,120 +1,49 @@
 {
   "graphData": {
-    "last_node_id": 3,
+    "last_node_id": 4,
     "last_link_id": 2,
     "nodes": [
       {
-        "id": 1,
-        "type": "basic/const",
+        "id": 4,
+        "type": "events/onmessage",
         "pos": {
-          "0": 100,
-          "1": 100
-        },
-        "size": {
-          "0": 210,
-          "1": 58
-        },
-        "flags": {},
-        "order": 0,
-        "mode": 0,
-        "inputs": [],
-        "outputs": [
-          {
-            "name": "",
-            "type": "number",
-            "links": [
-              1
-            ]
-          }
-        ],
-        "properties": {
-          "value": 1
-        }
-      },
-      {
-        "id": 2,
-        "type": "basic/const",
-        "pos": {
-          "0": 100,
-          "1": 200
-        },
-        "size": {
-          "0": 210,
-          "1": 58
-        },
-        "flags": {},
-        "order": 1,
-        "mode": 0,
-        "inputs": [],
-        "outputs": [
-          {
-            "name": "",
-            "type": "number",
-            "links": [
-              2
-            ]
-          }
-        ],
-        "properties": {
-          "value": 2
-        }
-      },
-      {
-        "id": 3,
-        "type": "basic/sum",
-        "pos": {
-          "0": 400,
-          "1": 150
+          "0": 468,
+          "1": 180
         },
         "size": {
           "0": 210,
           "1": 78
         },
         "flags": {},
-        "order": 2,
+        "order": 0,
         "mode": 0,
         "inputs": [
           {
-            "name": "A",
-            "type": "number",
-            "link": 1
-          },
-          {
-            "name": "B",
-            "type": "number",
-            "link": 2
+            "name": "message",
+            "type": "string",
+            "link": null
           }
         ],
         "outputs": [
           {
-            "name": "A+B",
-            "type": "number",
+            "name": "message",
+            "type": "string",
+            "links": null,
+            "slot_index": 0
+          },
+          {
+            "name": "trigger_message",
+            "type": "string",
             "links": null
           }
         ],
         "properties": {
-          "precision": 1
+          "message": "",
+          "eventType": "onMessage"
         }
       }
     ],
-    "links": [
-      [
-        1,
-        1,
-        0,
-        3,
-        0,
-        "number"
-      ],
-      [
-        2,
-        2,
-        0,
-        3,
-        1,
-        "number"
-      ]
-    ],
+    "links": [],
     "groups": [],
     "config": {},
     "extra": {},

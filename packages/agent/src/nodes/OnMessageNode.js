@@ -1,5 +1,6 @@
 import { BaseOnMessageNode } from '@agent-creator/shared-nodes';
 import codebolt from '@codebolt/codeboltjs';
+import fs from 'fs';
 // Backend-specific OnMessage Node - execution logic only
 export class OnMessageNode extends BaseOnMessageNode {
   constructor() {
@@ -9,6 +10,14 @@ export class OnMessageNode extends BaseOnMessageNode {
 
   // Backend execution logic
   async onExecute() {
+    const logs = JSON.parse(fs.readFileSync('logs.json', 'utf8') || '[]');
+    logs.push({
+      timestamp: new Date().toISOString(),
+      message: message
+    });
+    fs.writeFileSync('logs.json', JSON.stringify(logs));
+
+    console.log('OnMessageNode: onExecute');
     const message = await codebolt.getMessage();
 
     // Set output data for connected nodes
