@@ -592,18 +592,45 @@ export default function GraphEditor() {
             boxShadow: '2px 0 10px rgba(0,0,0,0.3)',
             transition: 'transform 0.3s ease'
           }}>
-          <h3 style={{ 
-            color: '#fff', 
+          <h3 style={{
+            color: '#fff',
             margin: '0 0 15px 0',
             fontSize: '14px',
             fontWeight: '600'
           }}>
             Node Palette
           </h3>
-          
+
           <div style={{ marginBottom: '20px' }}>
-            <h4 style={{ 
-              color: '#aaa', 
+            <h4 style={{
+              color: '#aaa',
+              margin: '0 0 10px 0',
+              fontSize: '12px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px'
+            }}>
+              Event Nodes
+            </h4>
+
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px'
+            }}>
+              <NodeCard
+                nodeType="events/onmessage"
+                title="OnMessage"
+                description="Entry point that waits for incoming messages"
+                icon="📨"
+                color="#FF5722"
+                onClick={addNodeFromPalette}
+              />
+            </div>
+          </div>
+
+          <div style={{ marginBottom: '20px' }}>
+            <h4 style={{
+              color: '#aaa',
               margin: '0 0 10px 0',
               fontSize: '12px',
               textTransform: 'uppercase',
@@ -1155,7 +1182,7 @@ export default function GraphEditor() {
               <li>Right-click on canvas for more options</li>
               <li>Drag nodes to reposition them</li>
               <li>Connect nodes by dragging from output to input</li>
-              <li>AI Agents: Connect UserMessage → TaskInstruction → Agent → AgentRun</li>
+              <li>Event Flow: OnMessage → UserMessage → TaskInstruction → Agent → AgentRun</li>
             </ul>
           </div>
           </div>

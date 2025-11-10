@@ -23,7 +23,7 @@ export class ConstNode extends BaseConstNode {
   // No execution logic in frontend - handled by backend
   onExecute() {
     // Empty - frontend doesn't execute
-    console.log(`ConstNode ${this.id} - UI only, execution handled by backend`);
+    // console.log(`ConstNode ${this.id} - UI only, execution handled by backend`);
   }
 
   // Handle property changes with UI updates

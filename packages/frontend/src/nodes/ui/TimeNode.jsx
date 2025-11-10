@@ -12,7 +12,7 @@ export class TimeNode extends BaseTimeNode {
   // Frontend display
   onExecute() {
     // Empty - frontend doesn't execute
-    console.log(`TimeNode ${this.id} - UI only, execution handled by backend`);
+    // console.log(`TimeNode ${this.id} - UI only, execution handled by backend`);
   }
 
   onDrawForeground(ctx, canvas) {

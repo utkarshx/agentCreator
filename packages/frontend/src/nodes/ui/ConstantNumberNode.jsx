@@ -30,7 +30,7 @@ export class ConstantNumberNode extends BaseConstantNumberNode {
 
   // No execution logic in frontend
   onExecute() {
-    console.log(`ConstantNumberNode ${this.id} - UI only, execution handled by backend`);
+    // console.log(`ConstantNumberNode ${this.id} - UI only, execution handled by backend`);
   }
 
   // Handle property changes with UI updates

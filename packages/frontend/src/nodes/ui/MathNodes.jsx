@@ -3,14 +3,14 @@ import { BaseBypassNode, BaseToNumberNode, BaseRandNode, BaseAbsNode, BaseClampN
 // Frontend-specific Bypass Node - UI only
 export class BypassNode extends BaseBypassNode {
   onExecute() {
-    console.log(`BypassNode ${this.id} - UI only, execution handled by backend`);
+    // console.log(`BypassNode ${this.id} - UI only, execution handled by backend`);
   }
 }
 
 // Frontend-specific ToNumber Node - UI only
 export class ToNumberNode extends BaseToNumberNode {
   onExecute() {
-    console.log(`ToNumberNode ${this.id} - UI only, execution handled by backend`);
+    // console.log(`ToNumberNode ${this.id} - UI only, execution handled by backend`);
   }
 }
 
@@ -28,7 +28,7 @@ export class RandNode extends BaseRandNode {
   }
 
   onExecute() {
-    console.log(`RandNode ${this.id} - UI only, execution handled by backend`);
+    // console.log(`RandNode ${this.id} - UI only, execution handled by backend`);
   }
 
   // Handle property changes with UI updates
@@ -45,7 +45,7 @@ export class RandNode extends BaseRandNode {
 // Frontend-specific Abs Node - UI only
 export class AbsNode extends BaseAbsNode {
   onExecute() {
-    console.log(`AbsNode ${this.id} - UI only, execution handled by backend`);
+    // console.log(`AbsNode ${this.id} - UI only, execution handled by backend`);
   }
 }
 
@@ -63,7 +63,7 @@ export class ClampNode extends BaseClampNode {
   }
 
   onExecute() {
-    console.log(`ClampNode ${this.id} - UI only, execution handled by backend`);
+    // console.log(`ClampNode ${this.id} - UI only, execution handled by backend`);
   }
 
   // Handle property changes with UI updates

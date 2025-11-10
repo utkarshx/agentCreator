@@ -152,7 +152,7 @@ export class MarkdownNode extends BaseMarkdownNode {
 
   // No execution logic in frontend
   onExecute() {
-    console.log(`MarkdownNode ${this.id} - UI only, execution handled by backend`);
+    // console.log(`MarkdownNode ${this.id} - UI only, execution handled by backend`);
   }
 
   // Handle property changes with UI updates

@@ -1,5 +1,6 @@
 // Export all base node classes
 export { BaseConstNode } from './BaseConstNode.js';
+export { BaseOnMessageNode } from './BaseOnMessageNode.js';
 export { BaseSumNode } from './BaseSumNode.js';
 export { BaseTimeNode } from './BaseTimeNode.js';
 export { BaseConstantNumberNode } from './BaseConstantNumberNode.js';
@@ -175,6 +176,15 @@ export const nodeMetadata = {
     description: 'Display markdown-formatted text',
     icon: '📝',
     color: '#9C27B0'
+  },
+  // Event nodes metadata
+  'events/onmessage': {
+    type: 'events/onmessage',
+    title: 'OnMessage',
+    category: 'events',
+    description: 'Entry point that waits for incoming messages and triggers agent flow',
+    icon: '📨',
+    color: '#FF5722'
   },
   // AI Agent nodes metadata
   'agent/user_message': {

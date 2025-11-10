@@ -11,7 +11,7 @@ export class OrNode extends BaseOrNode {
   }
 
   onExecute() {
-    console.log(`OrNode ${this.id} - UI only, execution handled by backend`);
+    // console.log(`OrNode ${this.id} - UI only, execution handled by backend`);
   }
 
   // Support dynamic inputs
@@ -23,7 +23,7 @@ export class OrNode extends BaseOrNode {
 // Frontend-specific NOT Node - UI only
 export class NotNode extends BaseNotNode {
   onExecute() {
-    console.log(`NotNode ${this.id} - UI only, execution handled by backend`);
+    // console.log(`NotNode ${this.id} - UI only, execution handled by backend`);
   }
 }
 
@@ -38,7 +38,7 @@ export class SelectorNode extends BaseSelectorNode {
   }
 
   onExecute() {
-    console.log(`SelectorNode ${this.id} - UI only, execution handled by backend`);
+    // console.log(`SelectorNode ${this.id} - UI only, execution handled by backend`);
   }
 
   // Handle property changes with UI updates

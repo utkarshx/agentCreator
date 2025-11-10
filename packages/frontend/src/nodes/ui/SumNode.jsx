@@ -29,7 +29,7 @@ export class SumNode extends BaseSumNode {
   // No execution logic in frontend - handled by backend
   onExecute() {
     // Empty - frontend doesn't execute
-    console.log(`SumNode ${this.id} - UI only, execution handled by backend`);
+    // console.log(`SumNode ${this.id} - UI only, execution handled by backend`);
   }
 
   // Handle property changes with UI updates

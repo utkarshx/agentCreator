@@ -41,7 +41,7 @@ class AgentManager {
 
       return new Promise((resolve, reject) => {
         const agentProcess = spawn('node', [agentPath], {
-          stdio: ['ignore', 'pipe', 'inherit'], // stdin ignored since we don't send commands
+          stdio: ['ignore', 'pipe', 'pipe'], // stdin ignored, stdout and stderr as pipes
           env: { ...process.env, NODE_AGENT_CLI: 'true' },
           cwd: process.cwd()
         });

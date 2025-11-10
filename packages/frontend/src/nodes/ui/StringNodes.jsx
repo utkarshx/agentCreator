@@ -18,7 +18,7 @@ export class CompareNode extends BaseCompareNode {
   }
 
   onExecute() {
-    console.log(`CompareNode ${this.id} - UI only, execution handled by backend`);
+    // console.log(`CompareNode ${this.id} - UI only, execution handled by backend`);
   }
 
   // Handle property changes with UI updates
@@ -35,7 +35,7 @@ export class CompareNode extends BaseCompareNode {
 // Frontend-specific ToUpperCase Node - UI only
 export class ToUpperCaseNode extends BaseToUpperCaseNode {
   onExecute() {
-    console.log(`ToUpperCaseNode ${this.id} - UI only, execution handled by backend`);
+    // console.log(`ToUpperCaseNode ${this.id} - UI only, execution handled by backend`);
   }
 }
 
@@ -50,7 +50,7 @@ export class ContainsNode extends BaseContainsNode {
   }
 
   onExecute() {
-    console.log(`ContainsNode ${this.id} - UI only, execution handled by backend`);
+    // console.log(`ContainsNode ${this.id} - UI only, execution handled by backend`);
   }
 
   // Handle property changes with UI updates

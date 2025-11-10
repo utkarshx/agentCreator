@@ -33,6 +33,9 @@ export {
 // Widget nodes
 export { MarkdownNode } from './MarkdownNode.js';
 
+// Event nodes
+export { OnMessageNode } from './OnMessageNode.js';
+
 // AI Agent nodes
 export { UserMessageNode } from './UserMessageNode.js';
 export { SystemPromptNode } from './SystemPromptNode.js';
@@ -73,6 +76,7 @@ import { MCPToolsNode as BackendMCPToolsNode } from './MCPToolsNode.js';
 import { TaskInstructionNode as BackendTaskInstructionNode } from './TaskInstructionNode.js';
 import { AgentNode as BackendAgentNode } from './AgentNode.js';
 import { AgentRunNode as BackendAgentRunNode } from './AgentRunNode.js';
+import { OnMessageNode as BackendOnMessageNode } from './OnMessageNode.js';
 
 export function registerBackendNodes() {
   // Register backend execution nodes
@@ -93,6 +97,9 @@ export function registerBackendNodes() {
   registerNodeWithMetadata(LiteGraph, BackendToUpperCaseNode, nodeMetadata['string/toUpperCase']);
   registerNodeWithMetadata(LiteGraph, BackendContainsNode, nodeMetadata['string/contains']);
   registerNodeWithMetadata(LiteGraph, BackendMarkdownNode, nodeMetadata['widget/markdown']);
+
+  // Register Event nodes
+  registerNodeWithMetadata(LiteGraph, BackendOnMessageNode, nodeMetadata['events/onmessage']);
 
   // Register AI Agent nodes
   registerNodeWithMetadata(LiteGraph, BackendUserMessageNode, nodeMetadata['agent/user_message']);

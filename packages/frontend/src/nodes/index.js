@@ -8,6 +8,8 @@ import {
   OrNode, NotNode, SelectorNode,
   ToStringNode, CompareNode, ToUpperCaseNode, ContainsNode,
   MarkdownNode,
+  // Event nodes
+  OnMessageNode,
   // AI Agent nodes
   UserMessageNode, SystemPromptNode, MCPToolsNode,
   TaskInstructionNode, AgentNode, AgentRunNode
@@ -81,6 +83,9 @@ export const registerNodes = () => {
   // Widget nodes
   registerNodeWithMetadata(LiteGraph, MarkdownNode, nodeMetadata['widget/markdown']);
 
+  // Event nodes
+  registerNodeWithMetadata(LiteGraph, OnMessageNode, nodeMetadata['events/onmessage']);
+
   // AI Agent nodes
   registerNodeWithMetadata(LiteGraph, UserMessageNode, nodeMetadata['agent/user_message']);
   registerNodeWithMetadata(LiteGraph, SystemPromptNode, nodeMetadata['agent/system_prompt']);
@@ -140,6 +145,8 @@ export {
   ToStringNode, CompareNode, ConcatenateNode, ContainsNode,
   ToUpperCaseNode, SplitNode, ToFixedNode, StringToTableNode,
   WidgetKnobNode, WidgetHSliderNode, WidgetProgressNode, WidgetTextNode, WidgetPanelNode,
+  // Event nodes
+  OnMessageNode,
   // AI Agent nodes
   UserMessageNode, SystemPromptNode, MCPToolsNode,
   TaskInstructionNode, AgentNode, AgentRunNode

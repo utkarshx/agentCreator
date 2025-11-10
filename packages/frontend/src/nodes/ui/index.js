@@ -33,6 +33,9 @@ export {
 // Widget nodes
 export { MarkdownNode } from './MarkdownNode.jsx';
 
+// Event nodes
+export { OnMessageNode } from './OnMessageNode.jsx';
+
 // AI Agent nodes
 export {
   UserMessageNode,
