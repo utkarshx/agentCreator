@@ -21,7 +21,7 @@ export class UserMessageNode extends BaseUserMessageNode {
       const userMessage = new UserMessage(reqMessage);
 
       this.setOutputData(0, userMessage);
-      console.log(`UserMessageNode ${this.id}: Created UserMessage instance for message length: ${reqMessage.length}`);
+      // console.log(`UserMessageNode ${this.id}: Created UserMessage instance for message length: ${reqMessage.length}`);
     } catch (error) {
       console.error(`UserMessageNode ${this.id}: Error creating UserMessage:`, error);
       this.setOutputData(0, null);

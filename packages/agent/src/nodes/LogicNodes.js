@@ -9,7 +9,7 @@ export class OrNode extends BaseOrNode {
     }
     const result = this.performLogicalOr(inputData);
     this.setOutputData(0, result);
-    console.log(`OrNode ${this.id}: ${JSON.stringify(inputData)} = ${result}`);
+    // console.log(`OrNode ${this.id}: ${JSON.stringify(inputData)} = ${result}`);
   }
 
   // Support dynamic inputs
@@ -24,7 +24,7 @@ export class NotNode extends BaseNotNode {
     const value = this.getInputData(0);
     const result = this.performNot(value);
     this.setOutputData(0, result);
-    console.log(`NotNode ${this.id}: !${value} = ${result}`);
+    // console.log(`NotNode ${this.id}: !${value} = ${result}`);
   }
 }
 
@@ -41,6 +41,6 @@ export class SelectorNode extends BaseSelectorNode {
 
     const selected = this.selectInput(inputs, selector);
     this.setOutputData(0, selected);
-    console.log(`SelectorNode ${this.id}: selected index ${selector} = ${selected}`);
+    // console.log(`SelectorNode ${this.id}: selected index ${selector} = ${selected}`);
   }
 }

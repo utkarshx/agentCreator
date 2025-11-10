@@ -408,7 +408,7 @@ export default function GraphEditor() {
       // Serialize the graph
       const graphData = graphRef.current.serialize();
       console.log(graphData)      // Send to backend for execution
-      const response = await fetch('http://localhost:3001/api/execute', {
+      const response = await fetch('http://localhost:3002/api/execute', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

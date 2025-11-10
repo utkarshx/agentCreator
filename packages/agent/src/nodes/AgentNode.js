@@ -29,7 +29,7 @@ export class AgentNode extends BaseAgentNode {
       agent.nodeType = 'agent';
 
       this.setOutputData(0, agent);
-      console.log(`AgentNode ${this.id}: Created Agent instance with tools`);
+      // console.log(`AgentNode ${this.id}: Created Agent instance with tools`);
     } catch (error) {
       console.error(`AgentNode ${this.id}: Error creating Agent:`, error);
       this.setOutputData(0, null);

@@ -12,6 +12,6 @@ export class ConstantNumberNode extends BaseConstantNumberNode {
     const value = this.validateValue(this.properties.value);
     this.setOutputData(0, value);
 
-    console.log(`ConstantNumberNode ${this.id}: outputting ${value}`);
+    // console.log(`ConstantNumberNode ${this.id}: outputting ${value}`);
   }
 }

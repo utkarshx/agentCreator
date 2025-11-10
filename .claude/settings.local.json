@@ -7,7 +7,11 @@
       "Bash(pnpm --version:*)",
       "Bash(xargs:*)",
       "Bash(pnpm --filter @agent-creator/shared-nodes run build:*)",
-      "Bash(pnpm run dev:*)"
+      "Bash(pnpm run dev:*)",
+      "Bash(NODE_AGENT_CLI=true node:*)",
+      "Bash(lsof:*)",
+      "Bash(npm run dev)",
+      "Bash(node:*)"
     ],
     "deny": [],
     "ask": []

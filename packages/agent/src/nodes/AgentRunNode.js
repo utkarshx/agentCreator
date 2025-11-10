@@ -24,7 +24,7 @@ export class AgentRunNode extends BaseAgentRunNode {
     const startTime = Date.now();
 
     try {
-      console.log(`AgentRunNode ${this.id}: Starting agent execution...`);
+      // console.log(`AgentRunNode ${this.id}: Starting agent execution...`);
 
       // Execute the agent exactly as in your example: agent.run(task)
       const { message, success, error } = await agent.run(taskInstruction);
@@ -44,7 +44,7 @@ export class AgentRunNode extends BaseAgentRunNode {
       this.setOutputData(3, error || '');
       this.setOutputData(4, executionTime);
 
-      console.log(`AgentRunNode ${this.id}: Execution completed in ${executionTime}ms. Success: ${success}`);
+      // console.log(`AgentRunNode ${this.id}: Execution completed in ${executionTime}ms. Success: ${success}`);
 
     } catch (error) {
       const executionTime = Date.now() - startTime;

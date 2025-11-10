@@ -16,7 +16,7 @@ export class MarkdownNode extends BaseMarkdownNode {
 
     // In backend, we could process markdown and output as HTML
     // or keep it as a display-only node
-    console.log(`MarkdownNode ${this.id}: Processing ${content.length} characters`);
+    // console.log(`MarkdownNode ${this.id}: Processing ${content.length} characters`);
 
     // If this node has outputs, you could output the processed HTML
     if (this.outputs && this.outputs.length > 0) {

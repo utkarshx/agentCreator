@@ -20,7 +20,7 @@ export class SystemPromptNode extends BaseSystemPromptNode {
       const systemPrompt = new SystemPrompt(filePath, profile);
 
       this.setOutputData(0, systemPrompt);
-      console.log(`SystemPromptNode ${this.id}: Created SystemPrompt instance from ${filePath} with profile: ${profile}`);
+      // console.log(`SystemPromptNode ${this.id}: Created SystemPrompt instance from ${filePath} with profile: ${profile}`);
     } catch (error) {
       console.error(`SystemPromptNode ${this.id}: Error creating SystemPrompt:`, error);
       this.setOutputData(0, null);

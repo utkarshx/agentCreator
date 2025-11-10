@@ -28,7 +28,7 @@ export class TaskInstructionNode extends BaseTaskInstructionNode {
       const task = new TaskInstruction(agentTools, userMessage, filePath, taskName);
 
       this.setOutputData(0, task);
-      console.log(`TaskInstructionNode ${this.id}: Created TaskInstruction instance for ${taskName}`);
+      // console.log(`TaskInstructionNode ${this.id}: Created TaskInstruction instance for ${taskName}`);
     } catch (error) {
       console.error(`TaskInstructionNode ${this.id}: Error creating TaskInstruction:`, error);
       this.setOutputData(0, null);

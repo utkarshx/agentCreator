@@ -23,7 +23,7 @@ export class MCPToolsNode extends BaseMCPToolsNode {
         throw new Error('Codebolt connection not initialized. Please check server startup.');
       }
 
-      console.log(`MCPToolsNode ${this.id}: Fetching tools from servers:`, servers);
+      // console.log(`MCPToolsNode ${this.id}: Fetching tools from servers:`, servers);
 
       // Actual Codebolt SDK call - using the exact pattern from your example
       const { data } = await global.codebolt.mcp.listMcpFromServers(servers);
@@ -32,7 +32,7 @@ export class MCPToolsNode extends BaseMCPToolsNode {
       this.setOutputData(0, data);
       this.setOutputData(1, data ? data.length : 0);
 
-      console.log(`MCPToolsNode ${this.id}: Successfully loaded ${data ? data.length : 0} tools`);
+      // console.log(`MCPToolsNode ${this.id}: Successfully loaded ${data ? data.length : 0} tools`);
     } catch (error) {
       console.error(`MCPToolsNode ${this.id}: Error fetching tools:`, error);
       this.setOutputData(0, []);

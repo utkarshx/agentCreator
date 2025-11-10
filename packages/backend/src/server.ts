@@ -1,12 +1,11 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { LGraph, LiteGraph } from '@comfyorg/litegraph';
-import { registerBackendNodes } from './nodes/index.js';
+import AgentManager from './agent-manager.js';
 
 // Initialize Express app
 const app = express();
-const PORT = process?.env?.PORT || 3001;
+const PORT = process?.env?.PORT || 3002;
 
 // Middleware
 app.use(cors());
@@ -16,22 +15,8 @@ app.use(bodyParser.json());
 // This is currently unused but kept for future implementation
 const _GRAPHS = new Map();
 
-// Initialize codebolt connection globally
-let codebolt: any = null;
-
-// Initialize codebolt connection
-async function initializeCodebolt() {
-  if (!codebolt) {
-    try {
-      codebolt = require('@codebolt/codeboltjs');
-      console.log('Codebolt connection initialized successfully');
-    } catch (error) {
-      console.error('Failed to initialize Codebolt connection:', error);
-      throw error;
-    }
-  }
-  return codebolt;
-}
+// Initialize agent manager
+const agentManager = new AgentManager();
 
 // API endpoint to execute a graph
 app.post('/api/execute', async (req, res) => {
@@ -42,65 +27,16 @@ app.post('/api/execute', async (req, res) => {
       return res.status(400).json({ error: 'Graph data is required' });
     }
 
-    // Initialize codebolt connection
-    await initializeCodebolt();
+    console.log('Backend: Delegating graph execution to agent process');
 
-    // Store message in execution context for AI agent nodes
-    if (message) {
-      global.executionContext = {
-        message: message,
-        timestamp: new Date().toISOString()
-      };
+    // Delegate execution to the agent process
+    const result = await agentManager.executeGraph(graphData, message);
+
+    if (result.success) {
+      res.json(result);
+    } else {
+      res.status(500).json(result);
     }
-
-    // Create a new graph
-    const graph = new LGraph();
-
-    // Register backend execution nodes (using shared base classes)
-    registerBackendNodes();
-
-    // Configure the graph from the frontend data
-    graph.configure(graphData);
-
-    // Execute the graph
-    graph.runStep(1, true);
-
-    // Collect outputs from AgentRun nodes and other output nodes
-    const outputs = {};
-
-    // Collect from SumNode (existing logic)
-    try {
-      const { SumNode } = await import('./nodes/SumNode.js');
-      graph.findNodesByClass(SumNode).forEach((node, index) => {
-        outputs[`output_${index}`] = (node.outputs[0] as any)?._data || (node.outputs[0] as any)?.data;
-      });
-    } catch (error) {
-      console.log('No SumNode found or error importing SumNode:', error.message);
-    }
-
-    // Collect from AgentRunNode (AI agent results)
-    try {
-      const { AgentRunNode } = await import('./nodes/AgentRunNode.js');
-      const agentRunNodes = graph.findNodesByClass(AgentRunNode);
-      agentRunNodes.forEach((node, index) => {
-        const result = (node.outputs[0] as any)?._data || (node.outputs[0] as any)?.data;
-        if (result) {
-          outputs[`agent_result_${index}`] = result;
-          outputs[`agent_message_${index}`] = result.message || '';
-          outputs[`agent_success_${index}`] = result.success || false;
-          outputs[`agent_error_${index}`] = result.error || '';
-          outputs[`agent_execution_time_${index}`] = (node.outputs[4] as any)?._data || (node.outputs[4] as any)?.data || 0;
-        }
-      });
-    } catch (error) {
-      console.log('No AgentRunNode found or error importing AgentRunNode:', error.message);
-    }
-
-    res.json({
-      success: true,
-      outputs,
-      message: 'Graph executed successfully'
-    });
 
   } catch (error) {
     console.error('Error executing graph:', error);
@@ -111,9 +47,55 @@ app.post('/api/execute', async (req, res) => {
   }
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+// API endpoint to get agent status
+app.get('/api/agent/status', async (req, res) => {
+  try {
+    const status = await agentManager.getStatus();
+    res.json({
+      success: true,
+      status
+    });
+  } catch (error) {
+    console.error('Error getting agent status:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
 });
 
-// ES modules are used, no need for module.exports
+// API endpoint to restart agent
+app.post('/api/agent/restart', async (req, res) => {
+  try {
+    agentManager.restart();
+    res.json({
+      success: true,
+      message: 'Agent restarted successfully'
+    });
+  } catch (error) {
+    console.error('Error restarting agent:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Backend server running on http://localhost:${PORT}`);
+  console.log('Agent execution is handled in a separate process');
+});
+
+// Graceful shutdown
+process.on('SIGINT', async () => {
+  console.log('Shutting down backend server...');
+  await agentManager.shutdown();
+  process.exit(0);
+});
+
+process.on('SIGTERM', async () => {
+  console.log('Shutting down backend server...');
+  await agentManager.shutdown();
+  process.exit(0);
+});

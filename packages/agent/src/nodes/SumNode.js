@@ -14,8 +14,8 @@ export class SumNode extends BaseSumNode {
     const sum = this.calculateSum(a, b);
     this.setOutputData(0, sum);
 
-    // Optional: Log execution for debugging
-    console.log(`SumNode ${this.id}: ${a} + ${b} = ${sum} (precision: ${this.properties.precision})`);
+    // Optional: Log execution for debugging (commented out to avoid JSON protocol interference)
+    // // console.log(`SumNode ${this.id}: ${a} + ${b} = ${sum} (precision: ${this.properties.precision})`);
   }
 
   // Enhanced error handling for backend

@@ -5,7 +5,7 @@ export class BypassNode extends BaseBypassNode {
   onExecute() {
     const value = this.getInputData(0);
     this.setOutputData(0, value);
-    console.log(`BypassNode ${this.id}: passing through ${value}`);
+    // // console.log(`BypassNode ${this.id}: passing through ${value}`);
   }
 }
 
@@ -15,7 +15,7 @@ export class ToNumberNode extends BaseToNumberNode {
     const value = this.getInputData(0);
     const number = this.convertToNumber(value);
     this.setOutputData(0, number);
-    console.log(`ToNumberNode ${this.id}: converted ${value} to ${number}`);
+    // // console.log(`ToNumberNode ${this.id}: converted ${value} to ${number}`);
   }
 }
 
@@ -26,7 +26,7 @@ export class RandNode extends BaseRandNode {
     const max = this.getInputData(2);
     const random = this.generateRandom(min, max);
     this.setOutputData(0, random);
-    console.log(`RandNode ${this.id}: generated random ${random} between [${min}, ${max}]`);
+    // // console.log(`RandNode ${this.id}: generated random ${random} between [${min}, ${max}]`);
   }
 }
 
@@ -36,7 +36,7 @@ export class AbsNode extends BaseAbsNode {
     const value = this.getInputData(0);
     const abs = this.calculateAbs(value);
     this.setOutputData(0, abs);
-    console.log(`AbsNode ${this.id}: |${value}| = ${abs}`);
+    // // console.log(`AbsNode ${this.id}: |${value}| = ${abs}`);
   }
 }
 
@@ -48,6 +48,6 @@ export class ClampNode extends BaseClampNode {
     const max = this.getInputData(2);
     const clamped = this.calculateClamp(value, min, max);
     this.setOutputData(0, clamped);
-    console.log(`ClampNode ${this.id}: clamped ${value} to [${min}, ${max}] = ${clamped}`);
+    // // console.log(`ClampNode ${this.id}: clamped ${value} to [${min}, ${max}] = ${clamped}`);
   }
 }

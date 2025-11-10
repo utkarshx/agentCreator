@@ -13,6 +13,6 @@ export class TimeNode extends BaseTimeNode {
     this.setOutputData(0, time.milliseconds);
     this.setOutputData(1, time.seconds);
 
-    console.log(`TimeNode ${this.id}: ${time.milliseconds}ms, ${time.seconds}s`);
+    // console.log(`TimeNode ${this.id}: ${time.milliseconds}ms, ${time.seconds}s`);
   }
 }

@@ -6,7 +6,7 @@ export class ToStringNode extends BaseToStringNode {
     const value = this.getInputData(0);
     const result = this.convertToString(value);
     this.setOutputData(0, result);
-    console.log(`ToStringNode ${this.id}: ${value} -> "${result}"`);
+    // // console.log(`ToStringNode ${this.id}: ${value} -> "${result}"`);
   }
 }
 
@@ -18,7 +18,7 @@ export class CompareNode extends BaseCompareNode {
     const caseSensitive = this.properties.case_sensitive;
     const result = this.compareStrings(a, b, caseSensitive);
     this.setOutputData(0, result);
-    console.log(`CompareNode ${this.id}: "${a}" == "${b}" (case: ${caseSensitive}) = ${result}`);
+    // // console.log(`CompareNode ${this.id}: "${a}" == "${b}" (case: ${caseSensitive}) = ${result}`);
   }
 }
 
@@ -28,7 +28,7 @@ export class ToUpperCaseNode extends BaseToUpperCaseNode {
     const value = this.getInputData(0);
     const result = this.toUpperCase(value);
     this.setOutputData(0, result);
-    console.log(`ToUpperCaseNode ${this.id}: "${value}" -> "${result}"`);
+    // // console.log(`ToUpperCaseNode ${this.id}: "${value}" -> "${result}"`);
   }
 }
 
@@ -40,6 +40,6 @@ export class ContainsNode extends BaseContainsNode {
     const caseSensitive = this.properties.case_sensitive;
     const result = this.containsSubstring(str, substr, caseSensitive);
     this.setOutputData(0, result);
-    console.log(`ContainsNode ${this.id}: "${str}" contains "${substr}" (case: ${caseSensitive}) = ${result}`);
+    // // console.log(`ContainsNode ${this.id}: "${str}" contains "${substr}" (case: ${caseSensitive}) = ${result}`);
   }
 }
