@@ -41,7 +41,7 @@ class AgentManager {
 
       return new Promise((resolve, reject) => {
         const agentProcess = spawn('node', [agentPath], {
-          stdio: ['pipe', 'pipe', 'inherit'],
+          stdio: ['ignore', 'pipe', 'inherit'], // stdin ignored since we don't send commands
           env: { ...process.env, NODE_AGENT_CLI: 'true' },
           cwd: process.cwd()
         });
@@ -67,10 +67,8 @@ class AgentManager {
 
                 if (parsed.ready) {
                   agentReady = true;
-                  console.log('Agent process is ready');
-
-                  // Send execute command - agent will read from data.json
-                  agentProcess.stdin.write(JSON.stringify({ type: 'execute' }) + '\n');
+                  console.log('Agent process is ready - auto-executing');
+                  // Agent will auto-execute, no need to send commands
                   continue;
                 }
 

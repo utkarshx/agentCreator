@@ -131,46 +131,24 @@ if (import.meta.url === `file://${process.argv[1]}` || process.env.NODE_AGENT_CL
   const agent = new AgentExecutor();
   agent.initialize();
 
-  // Listen for commands from stdin
-  process.stdin.setEncoding('utf8');
-  process.stdin.on('data', async (data) => {
-    try {
-      const command = JSON.parse(data.toString().trim());
-
-      switch (command.type) {
-        case 'execute':
-          const result = await agent.executeGraph();
-          process.stdout.write(JSON.stringify(result) + '\n');
-
-          // Exit after execution is complete
-          process.exit(0);
-          break;
-
-        case 'status':
-          const status = agent.getStatus();
-          process.stdout.write(JSON.stringify(status) + '\n');
-          break;
-
-        case 'stop':
-          agent.stop();
-          process.stdout.write(JSON.stringify({ success: true, message: 'Agent stopped' }) + '\n');
-          break;
-
-        case 'exit':
-          agent.stop();
-          process.exit(0);
-          break;
-
-        default:
-          process.stdout.write(JSON.stringify({ success: false, error: 'Unknown command' }) + '\n');
-      }
-    } catch (error) {
-      process.stdout.write(JSON.stringify({ success: false, error: error.message }) + '\n');
-    }
-  });
-
   // Signal that agent is ready
   process.stdout.write(JSON.stringify({ ready: true }) + '\n');
+
+  // Auto-execute graph from data.json file and exit
+  (async () => {
+    try {
+      const result = await agent.executeGraph();
+      process.stdout.write(JSON.stringify(result) + '\n');
+      process.exit(0);
+    } catch (error) {
+      process.stdout.write(JSON.stringify({
+        success: false,
+        error: error.message,
+        message: 'Graph execution failed'
+      }) + '\n');
+      process.exit(1);
+    }
+  })();
 }
 
 export default AgentExecutor;
