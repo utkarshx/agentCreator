@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm install:*)",
+      "Bash(pnpm run build:*)",
+      "Bash(find:*)",
+      "Bash(pnpm --version:*)",
+      "Bash(xargs:*)",
+      "Bash(pnpm --filter @agent-creator/shared-nodes run build:*)",
+      "Bash(pnpm run dev:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
