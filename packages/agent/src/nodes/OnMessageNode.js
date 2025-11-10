@@ -1,5 +1,5 @@
 import { BaseOnMessageNode } from '@agent-creator/shared-nodes';
-
+import codebolt from '@codebolt/codeboltjs';
 // Backend-specific OnMessage Node - execution logic only
 export class OnMessageNode extends BaseOnMessageNode {
   constructor() {
@@ -8,8 +8,8 @@ export class OnMessageNode extends BaseOnMessageNode {
   }
 
   // Backend execution logic
-  onExecute() {
-    const message = this.getMessage();
+  async onExecute() {
+    const message = await codebolt.getMessage();
 
     // Set output data for connected nodes
     this.setOutputData(0, message);
