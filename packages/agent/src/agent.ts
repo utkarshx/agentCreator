@@ -1,6 +1,7 @@
 import { spawn } from 'child_process';
 import { registerBackendNodes } from './nodes/index.js';
 import { readFileSync } from 'fs';
+import { LGraph } from '@comfyorg/litegraph';
 import codebolt from '@codebolt/codeboltjs';
 
 class AgentExecutor {
@@ -49,7 +50,7 @@ class AgentExecutor {
       }
 
       // Import and create a new graph
-      const { LGraph } = await import('@comfyorg/litegraph');
+      ;
       this.graph = new LGraph();
 
       // Configure the graph from the frontend data
@@ -129,8 +130,11 @@ class AgentExecutor {
 
 // CLI interface for standalone agent execution
 // if (import.meta.url === `file://${process.argv[1]}` || process.env.NODE_AGENT_CLI) {
-(async () => {
-  await codebolt.getMessage();
+// (async () => {
+//   await codebolt.getMessage();
+codebolt.onMessage(async (message) => {
+
+  console.log('Agent: Received message:', message);
   const agent = new AgentExecutor();
   agent.initialize();
 
@@ -140,6 +144,7 @@ class AgentExecutor {
   // Auto-execute graph from data.json file and exit
   try {
     const result = await agent.executeGraph();
+    codebolt.chat.sendMessage(result.message);
     process.stdout.write(JSON.stringify(result) + '\n');
     process.exit(0);
   } catch (error) {
@@ -150,7 +155,9 @@ class AgentExecutor {
     }) + '\n');
     process.exit(1);
   }
-})();
+});
+
+// })();
 // }
 
 export default AgentExecutor;
