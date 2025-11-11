@@ -1,7 +1,7 @@
 import { spawn } from 'child_process';
-import { LGraph, LiteGraph } from '@comfyorg/litegraph';
 import { registerBackendNodes } from './nodes/index.js';
 import { readFileSync } from 'fs';
+import codebolt from '@codebolt/codeboltjs';
 
 class AgentExecutor {
   private graph: any = null;
@@ -48,7 +48,8 @@ class AgentExecutor {
         };
       }
 
-      // Create a new graph
+      // Import and create a new graph
+      const { LGraph } = await import('@comfyorg/litegraph');
       this.graph = new LGraph();
 
       // Configure the graph from the frontend data
@@ -127,7 +128,9 @@ class AgentExecutor {
 }
 
 // CLI interface for standalone agent execution
-if (import.meta.url === `file://${process.argv[1]}` || process.env.NODE_AGENT_CLI) {
+// if (import.meta.url === `file://${process.argv[1]}` || process.env.NODE_AGENT_CLI) {
+(async () => {
+  await codebolt.getMessage();
   const agent = new AgentExecutor();
   agent.initialize();
 
@@ -135,20 +138,19 @@ if (import.meta.url === `file://${process.argv[1]}` || process.env.NODE_AGENT_CL
   process.stdout.write(JSON.stringify({ ready: true }) + '\n');
 
   // Auto-execute graph from data.json file and exit
-  (async () => {
-    try {
-      const result = await agent.executeGraph();
-      process.stdout.write(JSON.stringify(result) + '\n');
-      process.exit(0);
-    } catch (error) {
-      process.stdout.write(JSON.stringify({
-        success: false,
-        error: error.message,
-        message: 'Graph execution failed'
-      }) + '\n');
-      process.exit(1);
-    }
-  })();
-}
+  try {
+    const result = await agent.executeGraph();
+    process.stdout.write(JSON.stringify(result) + '\n');
+    process.exit(0);
+  } catch (error) {
+    process.stdout.write(JSON.stringify({
+      success: false,
+      error: error.message,
+      message: 'Graph execution failed'
+    }) + '\n');
+    process.exit(1);
+  }
+})();
+// }
 
 export default AgentExecutor;
