@@ -1,81 +1,21 @@
 {
   "graphData": {
-    "last_node_id": 6,
-    "last_link_id": 3,
+    "last_node_id": 4,
+    "last_link_id": 2,
     "nodes": [
-      {
-        "id": 5,
-        "type": "string/toString",
-        "pos": {
-          "0": 735,
-          "1": 323.25
-        },
-        "size": [
-          80,
-          30
-        ],
-        "flags": {},
-        "order": 0,
-        "mode": 0,
-        "inputs": [
-          {
-            "name": "in",
-            "type": 0,
-            "link": null
-          }
-        ],
-        "outputs": [
-          {
-            "name": "out",
-            "type": "string",
-            "links": null
-          }
-        ],
-        "properties": {}
-      },
-      {
-        "id": 6,
-        "type": "string/toString",
-        "pos": {
-          "0": 735,
-          "1": 323.25
-        },
-        "size": [
-          80,
-          30
-        ],
-        "flags": {},
-        "order": 2,
-        "mode": 0,
-        "inputs": [
-          {
-            "name": "in",
-            "type": 0,
-            "link": 3
-          }
-        ],
-        "outputs": [
-          {
-            "name": "out",
-            "type": "string",
-            "links": null
-          }
-        ],
-        "properties": {}
-      },
       {
         "id": 4,
         "type": "events/onmessage",
         "pos": {
-          "0": 411,
-          "1": 147
+          "0": 210,
+          "1": 135
         },
         "size": {
           "0": 210,
           "1": 78
         },
         "flags": {},
-        "order": 1,
+        "order": 0,
         "mode": 0,
         "inputs": [
           {
@@ -88,61 +28,22 @@
           {
             "name": "message",
             "type": "string",
-            "links": null
+            "links": null,
+            "slot_index": 0
           },
           {
             "name": "trigger_message",
             "type": "string",
-            "links": [
-              3
-            ],
-            "slot_index": 1
+            "links": null
           }
         ],
         "properties": {
           "message": "",
           "eventType": "onMessage"
         }
-      },
-      {
-        "id": 1,
-        "type": "basic/const",
-        "pos": {
-          "0": 100,
-          "1": 100
-        },
-        "size": {
-          "0": 210,
-          "1": 58
-        },
-        "flags": {},
-        "order": 0,
-        "mode": 0,
-        "inputs": [],
-        "outputs": [
-          {
-            "name": "",
-            "type": "number",
-            "links": [
-              1
-            ]
-          }
-        ],
-        "properties": {
-          "value": 6
-        }
       }
     ],
-    "links": [
-      [
-        3,
-        4,
-        1,
-        6,
-        0,
-        "string"
-      ]
-    ],
+    "links": [],
     "groups": [],
     "config": {},
     "extra": {},

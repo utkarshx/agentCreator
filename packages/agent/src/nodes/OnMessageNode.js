@@ -19,6 +19,8 @@ export class OnMessageNode extends BaseOnMessageNode {
 
     console.log('OnMessageNode: onExecute');
     const message = await codebolt.getMessage();
+    codebolt.chat.sendMessage(result.message);
+    
 
     // Set output data for connected nodes
     this.setOutputData(0, message);
