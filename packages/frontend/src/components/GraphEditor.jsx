@@ -636,6 +636,33 @@ export default function GraphEditor() {
               textTransform: 'uppercase',
               letterSpacing: '0.5px'
             }}>
+              Codebolt Nodes
+            </h4>
+
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px'
+            }}>
+              <NodeCard
+                nodeType="codebolt/chat/sendmessage"
+                title="Send Message"
+                description="Sends a message using codebolt.chat.sendMessage"
+                icon="💬"
+                color="#2196F3"
+                onClick={addNodeFromPalette}
+              />
+            </div>
+          </div>
+
+          <div style={{ marginBottom: '20px' }}>
+            <h4 style={{
+              color: '#aaa',
+              margin: '0 0 10px 0',
+              fontSize: '12px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px'
+            }}>
               Basic Nodes
             </h4>
             

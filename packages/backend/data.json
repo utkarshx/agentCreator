@@ -103,6 +103,34 @@
           "message": "",
           "eventType": "onMessage"
         }
+      },
+      {
+        "id": 1,
+        "type": "basic/const",
+        "pos": {
+          "0": 100,
+          "1": 100
+        },
+        "size": {
+          "0": 210,
+          "1": 58
+        },
+        "flags": {},
+        "order": 0,
+        "mode": 0,
+        "inputs": [],
+        "outputs": [
+          {
+            "name": "",
+            "type": "number",
+            "links": [
+              1
+            ]
+          }
+        ],
+        "properties": {
+          "value": 6
+        }
       }
     ],
     "links": [

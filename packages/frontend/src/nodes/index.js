@@ -10,6 +10,8 @@ import {
   MarkdownNode,
   // Event nodes
   OnMessageNode,
+  // Codebolt nodes
+  SendMessageNode,
   // AI Agent nodes
   UserMessageNode, SystemPromptNode, MCPToolsNode,
   TaskInstructionNode, AgentNode, AgentRunNode
@@ -86,6 +88,9 @@ export const registerNodes = () => {
   // Event nodes
   registerNodeWithMetadata(LiteGraph, OnMessageNode, nodeMetadata['events/onmessage']);
 
+  // Codebolt nodes
+  registerNodeWithMetadata(LiteGraph, SendMessageNode, nodeMetadata['codebolt/chat/sendmessage']);
+
   // AI Agent nodes
   registerNodeWithMetadata(LiteGraph, UserMessageNode, nodeMetadata['agent/user_message']);
   registerNodeWithMetadata(LiteGraph, SystemPromptNode, nodeMetadata['agent/system_prompt']);
@@ -147,6 +152,8 @@ export {
   WidgetKnobNode, WidgetHSliderNode, WidgetProgressNode, WidgetTextNode, WidgetPanelNode,
   // Event nodes
   OnMessageNode,
+  // Codebolt nodes
+  SendMessageNode,
   // AI Agent nodes
   UserMessageNode, SystemPromptNode, MCPToolsNode,
   TaskInstructionNode, AgentNode, AgentRunNode

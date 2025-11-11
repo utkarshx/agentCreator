@@ -36,6 +36,9 @@ export { MarkdownNode } from './MarkdownNode.js';
 // Event nodes
 export { OnMessageNode } from './OnMessageNode.js';
 
+// Codebolt nodes
+export { SendMessageNode } from './SendMessageNode.js';
+
 // AI Agent nodes
 export { UserMessageNode } from './UserMessageNode.js';
 export { SystemPromptNode } from './SystemPromptNode.js';
@@ -77,6 +80,7 @@ import { TaskInstructionNode as BackendTaskInstructionNode } from './TaskInstruc
 import { AgentNode as BackendAgentNode } from './AgentNode.js';
 import { AgentRunNode as BackendAgentRunNode } from './AgentRunNode.js';
 import { OnMessageNode as BackendOnMessageNode } from './OnMessageNode.js';
+import { SendMessageNode as BackendSendMessageNode } from './SendMessageNode.js';
 
 export function registerBackendNodes() {
   // Register backend execution nodes
@@ -100,6 +104,9 @@ export function registerBackendNodes() {
 
   // Register Event nodes
   registerNodeWithMetadata(LiteGraph, BackendOnMessageNode, nodeMetadata['events/onmessage']);
+
+  // Register Codebolt nodes
+  registerNodeWithMetadata(LiteGraph, BackendSendMessageNode, nodeMetadata['codebolt/chat/sendmessage']);
 
   // Register AI Agent nodes
   registerNodeWithMetadata(LiteGraph, BackendUserMessageNode, nodeMetadata['agent/user_message']);

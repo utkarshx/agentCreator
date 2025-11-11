@@ -1,6 +1,7 @@
 // Export all base node classes
 export { BaseConstNode } from './BaseConstNode.js';
 export { BaseOnMessageNode } from './BaseOnMessageNode.js';
+export { BaseSendMessageNode } from './BaseSendMessageNode.js';
 export { BaseSumNode } from './BaseSumNode.js';
 export { BaseTimeNode } from './BaseTimeNode.js';
 export { BaseConstantNumberNode } from './BaseConstantNumberNode.js';
@@ -185,6 +186,15 @@ export const nodeMetadata = {
     description: 'Entry point that waits for incoming messages and triggers agent flow',
     icon: '📨',
     color: '#FF5722'
+  },
+  // Codebolt nodes metadata
+  'codebolt/chat/sendmessage': {
+    type: 'codebolt/chat/sendmessage',
+    title: 'Send Message',
+    category: 'codebolt',
+    description: 'Sends a message using codebolt.chat.sendMessage',
+    icon: '💬',
+    color: '#2196F3'
   },
   // AI Agent nodes metadata
   'agent/user_message': {
