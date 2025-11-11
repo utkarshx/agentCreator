@@ -130,11 +130,8 @@ class AgentExecutor {
 
 // CLI interface for standalone agent execution
 // if (import.meta.url === `file://${process.argv[1]}` || process.env.NODE_AGENT_CLI) {
-// (async () => {
-  // let message= await codebolt.getMessage();
-  // console.log('Agent: Received message:', message);
-codebolt.onMessage(async (message) => {
-
+(async () => {
+  let message= await codebolt.getMessage();
   console.log('Agent: Received message:', message);
   const agent = new AgentExecutor();
   agent.initialize();
@@ -147,7 +144,9 @@ codebolt.onMessage(async (message) => {
     const result = await agent.executeGraph();
     codebolt.chat.sendMessage(result.message);
     process.stdout.write(JSON.stringify(result) + '\n');
+    
     process.exit(0);
+    
   } catch (error) {
     process.stdout.write(JSON.stringify({
       success: false,
@@ -156,9 +155,7 @@ codebolt.onMessage(async (message) => {
     }) + '\n');
     process.exit(1);
   }
-});
-
-//})();
+})();
 // }
 
 export default AgentExecutor;
