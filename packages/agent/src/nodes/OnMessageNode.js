@@ -10,20 +10,17 @@ export class OnMessageNode extends BaseOnMessageNode {
 
   // Backend execution logic
   async onExecute() {
-    const logs = JSON.parse(fs.readFileSync('logs.json', 'utf8') || '[]');
-    logs.push({
-      timestamp: new Date().toISOString(),
-      message: message
-    });
-    fs.writeFileSync('logs.json', JSON.stringify(logs));
+    try {
 
-    console.log('OnMessageNode: onExecute');
-    const message = await codebolt.getMessage();
+      let message = await codebolt.getMessage();
+      // console.log('Agent: Received message:', message);  
+      codebolt.chat.sendMessage("Executing OnMessageNode");
 
-    // Set output data for connected nodes
-    this.setOutputData(0, message);
-    this.setOutputData(1, message);
-
+      this.setOutputData(0, message);
+      this.setOutputData(1, message);
+    } catch (error) {
+      console.error('OnMessageNode: Error in onExecute:', error);
+    }
     // // console.log(`OnMessageNode ${this.id}: Processing message: ${message ? message.substring(0, 50) + '...' : 'empty'}`);
 
     // This node is typically the entry point that triggers the flow

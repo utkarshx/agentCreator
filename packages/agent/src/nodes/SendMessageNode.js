@@ -10,8 +10,10 @@ export class SendMessageNode extends BaseSendMessageNode {
 
   // Backend execution logic with actual codebolt implementation
   async sendMessage(message) {
+    console.log('SendMessageNode: sendMessage', message);
     try {
       // Call codebolt.chat.sendMessage
+      await codebolt.getMessage();
       const response = await codebolt.chat.sendMessage(message);
       return response;
     } catch (error) {
@@ -22,6 +24,7 @@ export class SendMessageNode extends BaseSendMessageNode {
 
   // Override onExecute to handle async properly
   async onExecute() {
+    console.log('SendMessageNode: onExecute');
     const message = this.validateMessage(this.getInputData(0));
 
     if (!message) {
