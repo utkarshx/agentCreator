@@ -22,14 +22,8 @@ export class BaseOnMessageNode extends LGraphNode {
       eventType: "onMessage"
     };
 
-    // Single input slot for incoming message
-    this.addInput("message", "string");
-
     // Single output slot to pass message to next nodes
     this.addOutput("message", "string");
-
-    // Output the original message that triggered the flow
-    this.addOutput("trigger_message", "string");
   }
 
   // Get the message from global execution context or data.json
@@ -65,15 +59,14 @@ export class BaseOnMessageNode extends LGraphNode {
   // Execute method for backend only
   onExecute() {
     // Check if we're in backend environment before executing
-    if (typeof window === 'undefined') {
-      const message = this.getMessage();
+    // if (typeof window === 'undefined') {
+    //   const message = this.getMessage();
 
-      // Set output data
-      this.setOutputData(0, message);
-      this.setOutputData(1, message);
+    //   // Set output data
+    //   this.setOutputData(0, message);
 
-      // // console.log(`OnMessageNode ${this.id}: Processing message: ${message ? message.substring(0, 50) + '...' : 'empty'}`);
-    }
+    //   // // console.log(`OnMessageNode ${this.id}: Processing message: ${message ? message.substring(0, 50) + '...' : 'empty'}`);
+    // }
     // Frontend: do nothing
   }
 

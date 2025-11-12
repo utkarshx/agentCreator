@@ -241,6 +241,7 @@ export default function GraphEditor() {
   const canvasRef = useRef(null);
   const canvasContainerRef = useRef(null);
   const [isExecuting, setIsExecuting] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [executionResult, setExecutionResult] = useState(null);
   const [isPaletteVisible, setIsPaletteVisible] = useState(false);
   const [selectedNode, setSelectedNode] = useState(null);
@@ -248,6 +249,8 @@ export default function GraphEditor() {
 
   useEffect(() => {
     if (!canvasContainerRef.current) return;
+
+    let isMounted = true;
 
     // Register all node types
     registerNodes();
@@ -280,7 +283,7 @@ export default function GraphEditor() {
     graphCanvas.onNodeDeselected = () => {
       setSelectedNode(null);
     };
-    
+
     // Override the getCanvasMenuOptions method to add custom context menu items
     const originalGetCanvasMenuOptions = graphCanvas.getCanvasMenuOptions;
     graphCanvas.getCanvasMenuOptions = function() {
@@ -309,40 +312,34 @@ export default function GraphEditor() {
       
       return options;
     };
-    
-    // Add some default nodes
-    function createNode(type, pos) {
-      const node = LiteGraph.createNode(type);
-      if (node) {
-        node.pos = pos || [0, 0];
-        graph.add(node);
-      } else {
-        console.error(`Failed to create node of type: ${type}`);
+
+    const loadSavedGraph = async () => {
+      try {
+        const response = await fetch('http://localhost:3002/api/graph');
+        if (!response.ok) {
+          throw new Error('Failed to fetch saved graph');
+        }
+
+        const result = await response.json();
+
+        if (result.success && result.graphData) {
+          graph.clear();
+          graph.configure(result.graphData);
+        }
+
+        if (isMounted && result.success) {
+          setUserMessage(result.message || '');
+        }
+      } catch (error) {
+        console.error('Error loading saved graph:', error);
+      } finally {
+        if (isMounted) {
+          graph.start();
+        }
       }
-      return node;
-    }
+    };
 
-    // Example: Add some default nodes
-    const node1 = createNode("basic/const", [100, 100]);
-    if (node1) {
-      node1.setProperty("value", 1);
-    }
-    
-    const node2 = createNode("basic/const", [100, 200]);
-    if (node2) {
-      node2.setProperty("value", 2);
-    }
-    
-    const sumNode = createNode("basic/sum", [400, 150]);
-    
-    // Connect nodes if all nodes were created successfully
-    if (node1 && node2 && sumNode) {
-      node1.connect(0, sumNode, 0);
-      node2.connect(0, sumNode, 1);
-    }
-
-    // Start the graph
-    graph.start();
+    loadSavedGraph();
 
     // Initial canvas sizing to ensure proper dimensions
     setTimeout(() => {
@@ -385,6 +382,7 @@ export default function GraphEditor() {
     
     // Cleanup function
     return () => {
+      isMounted = false;
       window.removeEventListener('resize', onResize);
       if (graph) {
         graph.stop();
@@ -407,7 +405,7 @@ export default function GraphEditor() {
       
       // Serialize the graph
       const graphData = graphRef.current.serialize();
-      console.log(graphData)      // Send to backend for execution
+      console.log(graphData); // Send to backend for execution
       const response = await fetch('http://localhost:3002/api/execute', {
         method: 'POST',
         headers: {
@@ -432,6 +430,39 @@ export default function GraphEditor() {
       });
     } finally {
       setIsExecuting(false);
+    }
+  };
+
+  const saveGraph = async () => {
+    if (!graphRef.current) return;
+
+    try {
+      setIsSaving(true);
+      const graphData = graphRef.current.serialize();
+
+      const response = await fetch('http://localhost:3002/api/save', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ graphData, message: userMessage }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Failed to save graph');
+      }
+
+      setExecutionResult(result);
+    } catch (error) {
+      console.error('Error saving graph:', error);
+      setExecutionResult({
+        success: false,
+        error: error.message || 'Failed to save graph'
+      });
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -531,6 +562,20 @@ export default function GraphEditor() {
                 width: '300px'
               }}
             />
+            <button
+              onClick={saveGraph}
+              disabled={isSaving || isExecuting}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: isSaving ? '#666' : '#2196F3',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: isSaving || isExecuting ? 'not-allowed' : 'pointer'
+              }}
+            >
+              {isSaving ? 'Saving...' : 'Save'}
+            </button>
             <button
               onClick={executeGraph}
               disabled={isExecuting}

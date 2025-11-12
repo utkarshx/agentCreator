@@ -13,7 +13,6 @@ export class SendMessageNode extends BaseSendMessageNode {
     console.log('SendMessageNode: sendMessage', message);
     try {
       // Call codebolt.chat.sendMessage
-      await codebolt.getMessage();
       const response = await codebolt.chat.sendMessage(message);
       return response;
     } catch (error) {
@@ -24,6 +23,7 @@ export class SendMessageNode extends BaseSendMessageNode {
 
   // Override onExecute to handle async properly
   async onExecute() {
+    console.log("[utkarsh] This is Starting to Execute SendMessageNode")
     console.log('SendMessageNode: onExecute');
     const message = this.validateMessage(this.getInputData(0));
 
@@ -35,7 +35,7 @@ export class SendMessageNode extends BaseSendMessageNode {
 
     try {
       // Set loading state
-      this.setOutputData(0, "Sending message...");
+      this.setOutputData(0, "Message Sent");
       this.setOutputData(1, false);
 
       // Call the actual codebolt.chat.sendMessage

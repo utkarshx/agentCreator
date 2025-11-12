@@ -6,37 +6,37 @@ export class SendMessageNode extends BaseSendMessageNode {
   constructor() {
     super();
 
-    // Add input widget for message
-    this.addWidget("text", "Message", this.properties.message, "message", {
-      multiline: true,
-      placeholder: "Enter message to send..."
-    });
+    // // Add input widget for message
+    // this.addWidget("text", "Message", this.properties.message, "message", {
+    //   multiline: true,
+    //   placeholder: "Enter message to send..."
+    // });
 
-    // Add display widget for response
-    this.addWidget("text", "Response", "", "response_display", {
-      multiline: true,
-      readonly: true,
-      placeholder: "Response will appear here..."
-    });
+    // // Add display widget for response
+    // this.addWidget("text", "Response", "", "response_display", {
+    //   multiline: true,
+    //   readonly: true,
+    //   placeholder: "Response will appear here..."
+    // });
   }
 
   // Frontend UI rendering
   onDrawForeground(ctx) {
     // Draw node title
-    ctx.fillStyle = "#2196F3"; // Blue color for codebolt nodes
-    ctx.font = "12px Arial";
-    ctx.fillText("💬 Send Message", 10, 15);
+    // ctx.fillStyle = "#2196F3"; // Blue color for codebolt nodes
+    // ctx.font = "12px Arial";
+    // ctx.fillText("💬 Send Message", 10, 15);
 
-    // Draw status
-    ctx.fillStyle = "#aaa";
-    ctx.font = "10px Arial";
-    const status = this.properties.response ? "✓ Sent" : "○ Ready";
-    ctx.fillText(status, 10, 30);
+    // // Draw status
+    // ctx.fillStyle = "#aaa";
+    // ctx.font = "10px Arial";
+    // const status = this.properties.response ? "✓ Sent" : "○ Ready";
+    // ctx.fillText(status, 10, 30);
 
-    // Draw message preview
-    const message = this.properties.message || "No message";
-    const preview = message.length > 25 ? message.substring(0, 25) + "..." : message;
-    ctx.fillText(preview, 10, 45);
+    // // Draw message preview
+    // const message = this.properties.message || "No message";
+    // const preview = message.length > 25 ? message.substring(0, 25) + "..." : message;
+    // ctx.fillText(preview, 10, 45);
   }
 
   // Frontend should not execute - handled by backend
@@ -49,21 +49,21 @@ export class SendMessageNode extends BaseSendMessageNode {
   onPropertyChanged(name, value) {
     super.onPropertyChanged(name, value);
 
-    if (name === 'message') {
-      // Update widget if exists
-      const messageWidget = this.widgets?.find(w => w.name === 'message');
-      if (messageWidget) {
-        messageWidget.value = value;
-      }
-    }
+    // if (name === 'message') {
+    //   // Update widget if exists
+    //   const messageWidget = this.widgets?.find(w => w.name === 'message');
+    //   if (messageWidget) {
+    //     messageWidget.value = value;
+    //   }
+    // }
 
-    if (name === 'response') {
-      // Update response display widget
-      const responseWidget = this.widgets?.find(w => w.name === 'response_display');
-      if (responseWidget) {
-        responseWidget.value = value || '';
-      }
-    }
+    // if (name === 'response') {
+    //   // Update response display widget
+    //   const responseWidget = this.widgets?.find(w => w.name === 'response_display');
+    //   if (responseWidget) {
+    //     responseWidget.value = value || '';
+    //   }
+    // }
   }
 }
 

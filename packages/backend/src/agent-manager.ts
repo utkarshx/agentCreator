@@ -1,7 +1,7 @@
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { writeFileSync, mkdirSync } from 'fs';
+import { writeFileSync, readFileSync, existsSync } from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -13,21 +13,47 @@ class AgentManager {
     // No need to create data directory - we write to project root
   }
 
+  private getDataFilePath(): string {
+    return join(__dirname, '../../agent/dist/data.json');
+  }
+
+  private writeGraphDataToFile(graphData: any, message?: string): string {
+    const dataFilePath = this.getDataFilePath();
+    const dataToWrite = {
+      graphData,
+      message
+    };
+
+    writeFileSync(dataFilePath, JSON.stringify(dataToWrite, null, 2));
+    console.log('Graph data written to:', dataFilePath);
+
+    return dataFilePath;
+  }
+
+  private readGraphDataFromFile(): { graphData: any; message?: string } | null {
+    const dataFilePath = this.getDataFilePath();
+
+    if (!existsSync(dataFilePath)) {
+      return null;
+    }
+
+    const fileContents = readFileSync(dataFilePath, 'utf-8');
+    const parsed = JSON.parse(fileContents);
+
+    return {
+      graphData: parsed?.graphData ?? null,
+      message: parsed?.message ?? ''
+    };
+  }
+
   private async executeAgentWithGraphData(graphData: any, message?: string): Promise<any> {
     try {
       // Write graph data and message to data.json file in the project root
       // Agent runs from project root and looks for data.json there
-      const dataFilePath = join(process.cwd(), 'data.json');
-      const dataToWrite = {
-        graphData,
-        message
-      };
-
-      writeFileSync(dataFilePath, JSON.stringify(dataToWrite, null, 2));
-      console.log('Graph data written to:', dataFilePath);
+      this.writeGraphDataToFile(graphData, message);
 
       // Start the agent process
-      const agentPath = join(__dirname, '../../agent/dist/index.js');
+      const agentPath = this.getDataFilePath();
       console.log('Starting agent process from:', agentPath);
 
       return new Promise((resolve, reject) => {
@@ -120,6 +146,24 @@ class AgentManager {
       return result;
     } catch (error) {
       console.error('Failed to execute graph:', error);
+      throw error;
+    }
+  }
+
+  async saveGraph(graphData: any, message?: string): Promise<void> {
+    try {
+      this.writeGraphDataToFile(graphData, message);
+    } catch (error) {
+      console.error('Failed to save graph:', error);
+      throw error;
+    }
+  }
+
+  async loadGraph(): Promise<{ graphData: any; message?: string } | null> {
+    try {
+      return this.readGraphDataFromFile();
+    } catch (error) {
+      console.error('Failed to load graph:', error);
       throw error;
     }
   }

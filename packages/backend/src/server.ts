@@ -18,6 +18,49 @@ const _GRAPHS = new Map();
 // Agent manager will be initialized per request
 
 // API endpoint to execute a graph
+app.get('/api/graph', async (req, res) => {
+  try {
+    const agentManager = new AgentManager();
+    const savedData = await agentManager.loadGraph();
+
+    res.json({
+      success: true,
+      graphData: savedData?.graphData ?? null,
+      message: savedData?.message ?? ''
+    });
+  } catch (error) {
+    console.error('Error loading graph:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
+app.post('/api/save', async (req, res) => {
+  try {
+    const { graphData, message } = req.body;
+
+    if (!graphData) {
+      return res.status(400).json({ error: 'Graph data is required' });
+    }
+
+    const agentManager = new AgentManager();
+    await agentManager.saveGraph(graphData, message);
+
+    res.json({
+      success: true,
+      message: 'Graph data saved successfully'
+    });
+  } catch (error) {
+    console.error('Error saving graph:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+});
+
 app.post('/api/execute', async (req, res) => {
   try {
     const { graphData, message } = req.body;

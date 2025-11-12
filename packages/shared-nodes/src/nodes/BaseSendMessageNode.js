@@ -42,35 +42,35 @@ export class BaseSendMessageNode extends LGraphNode {
 
   // Execute method for backend
   async onExecute() {
-    const message = this.validateMessage(this.getInputData(0));
+    // const message = this.validateMessage(this.getInputData(0));
 
-    if (!message) {
-      this.setOutputData(0, "Error: No message provided");
-      this.setOutputData(1, false);
-      return;
-    }
+    // if (!message) {
+    //   this.setOutputData(0, "Error: No message provided");
+    //   this.setOutputData(1, false);
+    //   return;
+    // }
 
-    try {
-      // This will be implemented in the backend node
-      const response = await this.sendMessage(message);
+    // try {
+    //   // This will be implemented in the backend node
+    //   const response = await this.sendMessage(message);
 
-      this.properties.response = response;
-      this.setOutputData(0, response);
-      this.setOutputData(1, true);
+    //   this.properties.response = response;
+    //   this.setOutputData(0, response);
+    //   this.setOutputData(1, true);
 
-      // // console.log(`SendMessageNode ${this.id}: Message sent successfully: ${message.substring(0, 30)}...`);
-    } catch (error) {
-      const errorMessage = `Error sending message: ${error.message}`;
-      this.setOutputData(0, errorMessage);
-      this.setOutputData(1, false);
+    //   // // console.log(`SendMessageNode ${this.id}: Message sent successfully: ${message.substring(0, 30)}...`);
+    // } catch (error) {
+    //   const errorMessage = `Error sending message: ${error.message}`;
+    //   this.setOutputData(0, errorMessage);
+    //   this.setOutputData(1, false);
 
-      // console.error(`SendMessageNode ${this.id}: Error sending message:`, error);
-    }
+    //   // console.error(`SendMessageNode ${this.id}: Error sending message:`, error);
+    // }
   }
 
   // This method should be overridden by the backend implementation
   async sendMessage(message) {
-    throw new Error("sendMessage must be implemented by backend node");
+    // throw new Error("sendMessage must be implemented by backend node");
   }
 
   // Handle property changes

@@ -13,25 +13,25 @@ export class OnMessageNode extends BaseOnMessageNode {
   // Frontend UI rendering
   onDrawForeground(ctx) {
     // Draw node title and message preview
-    ctx.fillStyle = "#FF5722"; // Orange color for event nodes
-    ctx.font = "12px Arial";
-    ctx.fillText("📨 OnMessage", 10, 15);
+    // ctx.fillStyle = "#FF5722"; // Orange color for event nodes
+    // ctx.font = "12px Arial";
+    // ctx.fillText("📨 OnMessage", 10, 15);
 
     // Draw message preview
-    ctx.fillStyle = "#aaa";
-    ctx.font = "10px Arial";
-    const message = this.properties.message || "Waiting for message...";
-    const preview = message.length > 20 ? message.substring(0, 20) + "..." : message;
-    ctx.fillText(preview, 10, 30);
+    // ctx.fillStyle = "#aaa";
+    // ctx.font = "10px Arial";
+    // const message = this.properties.message || "Waiting for message...";
+    // const preview = message.length > 20 ? message.substring(0, 20) + "..." : message;
+    // ctx.fillText(preview, 10, 30);
 
     // Draw trigger indicator
-    if (this.properties.message) {
-      ctx.fillStyle = "#4CAF50";
-      ctx.fillText("● Triggered", 10, 45);
-    } else {
-      ctx.fillStyle = "#999";
-      ctx.fillText("○ Waiting", 10, 45);
-    }
+    // if (this.properties.message) {
+    //   ctx.fillStyle = "#4CAF50";
+    //   ctx.fillText("● Triggered", 10, 45);
+    // } else {
+    //   ctx.fillStyle = "#999";
+    //   ctx.fillText("○ Waiting", 10, 45);
+    // }
   }
 
   // Frontend should not execute - handled by backend
@@ -45,7 +45,6 @@ export class OnMessageNode extends BaseOnMessageNode {
     if (name === "message") {
       this.properties.message = value;
       this.trigger("message");
-      this.trigger("trigger_message");
     }
   }
 }
